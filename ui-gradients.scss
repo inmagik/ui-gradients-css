@@ -1,0 +1,27 @@
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+  
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+  
+  @return $string;
+}
+
+@import 'gradients';
+
+@each $current-gradient in $gradients {
+    $i: index($gradients, $current-gradient);
+    $name : map-get($current-gradient, name);
+    $nameclass:str-replace(to-lower-case(#{$name}), " ", "-");
+    $colors : map-get($current-gradient, colors);
+    $col0 : nth($colors,1);
+    $col1 : nth($colors,2);
+    .ui-gradient-#{$nameclass} {
+        background: -webkit-linear-gradient(90deg, $col0 10%, $col1 90%);
+        background:    -moz-linear-gradient(90deg, $col0 10%, $col1 90%);
+        background:     -ms-linear-gradient(90deg, $col0 10%, $col1 90%);
+        background:      -o-linear-gradient(90deg, $col0 10%, $col1 90%);
+        background:         linear-gradient(90deg, $col0 10%, $col1 90%);
+    }
+}
